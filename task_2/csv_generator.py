@@ -9,7 +9,7 @@ import argparse
 import time
 from concurrent.futures import ProcessPoolExecutor
 
-POOL_WORKERS = 20
+POOL_WORKERS = 10
 
 
 class DataGenerator:
@@ -35,9 +35,14 @@ class DataGenerator:
         """
         rows = []
         for _ in range(self._rows_to_generate):
+            # Each row is a list of 1 number and 5 random strings
             rows.append(
                 [
                     random.randint(1, 10000),
+                    "".join(random.choices(string.ascii_uppercase + string.digits, k=10)),
+                    "".join(random.choices(string.ascii_uppercase + string.digits, k=10)),
+                    "".join(random.choices(string.ascii_uppercase + string.digits, k=10)),
+                    "".join(random.choices(string.ascii_uppercase + string.digits, k=10)),
                     "".join(random.choices(string.ascii_uppercase + string.digits, k=10)),
                 ]
             )
@@ -52,6 +57,7 @@ class DataGenerator:
             with ProcessPoolExecutor(max_workers=POOL_WORKERS) as executor:
                 futures = [executor.submit(self.generate_random_data) for _ in range(POOL_WORKERS)]
             for future in futures:
+                # Write rows inside each future to csv file
                 writer.writerows(future.result())
         print(f"File {self.file_name} is ready with {self.quantity} rows")
 

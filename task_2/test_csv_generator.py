@@ -6,9 +6,9 @@ Test for task_2.py
 import unittest
 import os
 import csv
-import random
 import string
-from task_2 import DataGenerator
+from csv_generator import DataGenerator
+
 
 class TestStringMethods(unittest.TestCase):
     def test_file_existence(self):
@@ -57,6 +57,7 @@ class TestStringMethods(unittest.TestCase):
                 self.assertTrue(len(row[1]) == 10)
                 self.assertTrue(all(c in string.ascii_uppercase + string.digits for c in row[1]))
         os.remove(file_name)
+
 
 if __name__ == "__main__":
     unittest.main()
